@@ -2,12 +2,17 @@ package com.aksain.kafka.main;
 
 import com.aksain.kafka.producers.SimpleKafkaProducer;
 
+/**
+ * @author Amit Kumar
+ */
 public class KafkaProducerDemo {
+
     public static void main(String[] args) {
         final String topicName = "test-topic";
 
         // Get Producer instance
         final SimpleKafkaProducer simpleKafkaProducer = SimpleKafkaProducer.getInstance();
+
         // Send 10 messages
         System.out.println("Sending 10 messages to Kafka...");
         for(int i =0; i < 10; i++) {

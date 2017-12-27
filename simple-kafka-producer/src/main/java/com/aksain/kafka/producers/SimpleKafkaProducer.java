@@ -6,12 +6,17 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 
 import java.util.Properties;
 
+/**
+ * <code>{@link SimpleKafkaProducer}</code> exposes methods to send messages to Kafka. It is implemented based on
+ * Singleton to avoid creation of multiple {@link KafkaProducer} instances.
+ */
 public class SimpleKafkaProducer {
     private static final SimpleKafkaProducer INSTANCE = new SimpleKafkaProducer();
 
     private final Producer<String, String> producer;
 
     private SimpleKafkaProducer() {
+        // Set some properties, ideally these would come from properties file
         final Properties props = new Properties();
         props.put("bootstrap.servers", "localhost:9092"); // Kafka brokers in format host1:port1,host2:port2
         props.put("acks", "1"); // 0 for no acknowledgements, 1 for leader acknowledgement and -1 for all replica acknowledgements
@@ -21,10 +26,22 @@ public class SimpleKafkaProducer {
         producer = new KafkaProducer<>(props);
     }
 
+    /**
+     * Factory method to get instance.
+     *
+     * @return instance of {@link SimpleKafkaProducer}
+     */
     public static SimpleKafkaProducer getInstance() {
         return INSTANCE;
     }
 
+    /**
+     * Sends message with input key and value to specified topic name.
+     *
+     * @param topicName name of topic to publish messages to
+     * @param key key of message
+     * @param value payload of message
+     */
     public void send(String topicName, String key, String value) {
         producer.send(new ProducerRecord<>(topicName, key, value));
     }
