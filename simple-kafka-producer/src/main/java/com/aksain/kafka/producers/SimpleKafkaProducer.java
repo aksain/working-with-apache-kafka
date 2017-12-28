@@ -20,6 +20,7 @@ public class SimpleKafkaProducer {
         final Properties props = new Properties();
         props.put("bootstrap.servers", "localhost:9092"); // Kafka brokers in format host1:port1,host2:port2
         props.put("acks", "1"); // 0 for no acknowledgements, 1 for leader acknowledgement and -1 for all replica acknowledgements
+        props.put("linger.ms", "1"); // Frequency of message commits to Kafka
         props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 
@@ -44,5 +45,14 @@ public class SimpleKafkaProducer {
      */
     public void send(String topicName, String key, String value) {
         producer.send(new ProducerRecord<>(topicName, key, value));
+    }
+
+    /**
+     * Releases pool of buffer space that holds records that haven't yet been transmitted to the server as well as a
+     * background I/O thread that is responsible for turning these records into requests and transmitting them to
+     * the cluster.
+     */
+    public void close() {
+        producer.close();
     }
 }
