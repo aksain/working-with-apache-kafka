@@ -4,12 +4,22 @@ import com.aksain.kafka.consumers.SimpleKafkaConsumer;
 
 import java.util.Arrays;
 
+/**
+ * @author Amit Kumar
+ */
 public class KafkaConsumerDemo {
     public static void main(String[] args) {
-        final String topicName = "test-topic";
+        if(args.length < 2) {
+            System.out.println("Usage java -jar com.aksain.kafka.main.KafkaConsumerDemo <topicnames> <consumergroupid>");
+            System.exit(1);
+        }
+
+        final String[] topicNames = args[0].split("\\s,\\s");
+        final String groupId = args[1];
 
         new SimpleKafkaConsumer(
-                Arrays.asList(topicName)
+                Arrays.asList(topicNames)
+                , groupId
                 , (key, value) -> System.out.println("Message Key: " + key + ", Value: " + value)
         ).start();
 
